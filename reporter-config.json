@@ -1,7 +1,7 @@
 {
   "reporterEnabled": "mochawesome",
   "mochawesomeReporterOptions": {
-    "reportDir": "mochawesome-report",
+    "reportDir": "mochawesome-unmerged-reports",
     "quiet": true,
     "overwrite": false,
     "html": false,

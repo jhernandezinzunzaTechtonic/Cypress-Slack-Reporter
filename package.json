@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "npx cypress run",
-    "clean-reports": "rm -R -f mochawesome-report",
+    "clean-reports": "rm -R -f mochawesome-report && rm -R -f mochawesome-unmerged-reports",
     "create-report": "npm run report-merge && npm run report-build",
-    "report-merge": "npx mochawesome-merge > mochawesome-report/MochawesomeMergedReport.json",
-    "report-build": "npx marge mochawesome-report/MochawesomeMergedReport.json"
+    "report-merge": "npx mochawesome-merge mochawesome-unmerged-reports/mochawesome*.json > mochawesome-report/MochawesomeMergedReport.json",
+    "report-build": "npx marge mochawesome-report/MochawesomeMergedReport.json",
+    "slack-reporter": "npx cypress-slack-reporter --screenshot-dir mochawesome-report/assets/  --report-dir mochawesome-report --ci-provider circleci"
   },
   "author": "",
   "license": "ISC",

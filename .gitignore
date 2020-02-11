@@ -105,5 +105,6 @@ dist
 
 # Test Folders
 mochawesome-report/
+mochawesome-unmerged-reports/
 cypress/videos/
 cypress/screenshots/
