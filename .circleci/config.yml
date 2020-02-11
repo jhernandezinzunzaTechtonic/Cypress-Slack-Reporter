@@ -36,7 +36,7 @@ jobs:
           name: Generate MochaAwesome Reports
           command: npm run create-report 
       - store_test_results:
-          path: mochawesome-report
+          path: mochawesome-unmerged-reports
       - store_artifacts:
           path: mochawesome-report
       - store_artifacts:
@@ -46,4 +46,4 @@ jobs:
       - run:
           when: always
           name: Slack Custom Reporting via cli command
-          command: npx cypress-slack-reporter --screenshot-dir mochawesome-report/assets/  --report-dir mochawesome-report --ci-provider circleci
+          command: npm run slack-reporter

@@ -9,7 +9,7 @@
     "create-report": "npm run report-merge && npm run report-build",
     "report-merge": "npx mochawesome-merge mochawesome-unmerged-reports/mochawesome*.json > mochawesome-report/MochawesomeMergedReport.json",
     "report-build": "npx marge mochawesome-report/MochawesomeMergedReport.json",
-    "slack-reporter": "npx cypress-slack-reporter --screenshot-dir mochawesome-report/assets/  --report-dir mochawesome-report --ci-provider circleci"
+    "slack-reporter": "npx cypress-slack-reporter --screenshot-dir mochawesome-report/assets/  --report-dir mochawesome-report"
   },
   "author": "",
   "license": "ISC",
