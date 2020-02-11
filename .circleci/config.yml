@@ -45,5 +45,5 @@ jobs:
           path: mochawesome-report/assets
       - run:
           when: always
-          name: Slack Custom Reporting via JavaScript Compiled File
-          command: yarn run slack-js
+          name: Slack Custom Reporting via cli command
+          command: npx cypress-slack-reporter --screenshot-dir mochawesome-report/assets/  --report-dir mochawesome-report --ci-provider circleci
