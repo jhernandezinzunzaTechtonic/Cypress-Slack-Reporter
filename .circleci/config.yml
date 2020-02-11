@@ -23,4 +23,23 @@ jobs:
           paths:
             - ~/.npm
             - ~/.cache
-      - run: $(npm bin)/cypress run --record --key <record_key>
+      - run:
+          when: always
+          name: Cleaning reports
+          command: npm run clean-reports
+      - run:
+          when: always
+          name: Running cypress tests
+          command: npx cypress run
+      - run:
+          when: always
+          name: Generate MochaAwesome Reports
+          command: npm run create-report 
+      - store_test_results:
+          path: mochawesome-report
+      - store_artifacts:
+          path: mochawesome-report
+      - store_artifacts:
+          path: cypress/videos
+      - store_artifacts:
+          path: mochawesome-report/assets
