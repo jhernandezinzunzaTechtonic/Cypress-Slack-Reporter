@@ -1,0 +1,91 @@
+# JavaScript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  test:
+    docker:
+      # the Docker image with Cypress dependencies
+      - image: cypress/base:10
+        environment:
+          ## this enables colors in the output
+          TERM: xterm
+    working_directory: ~/app
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
+            - v1-deps-{{ .Branch }}
+            - v1-deps
+      - run:
+          name: Install Dependencies
+          command: npm ci
+      - save_cache:
+          key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
+          # cache NPM modules and the folder with the Cypress binary
+          paths:
+            - ~/.npm
+            - ~/.cache
+      - run:
+          when: always
+          name: Cleaning reports
+          command: npm run clean-reports
+      - run:
+          when: always
+          name: Running cypress tests
+          command: npx cypress run
+      - run:
+          when: always
+          name: Generate MochaAwesome Reports
+          command: npm run create-report 
+      - store_test_results:
+          path: mochawesome-report
+      - store_artifacts:
+          path: mochawesome-report
+      - store_artifacts:
+          path: cypress/videos
+      - store_artifacts:
+          path: mochawesome-report/assets
+      - run:
+          when: always
+          name: Slack Custom Reporting via typeScript source File
+          command: yarn run slack-ts
+      - run:
+          when: always
+          name: Slack Custom Reporting via JavaScript Compiled File
+          command: yarn run slack-js
+      - run:
+          when: always
+          name: Slack Custom Reporting via typeScript source File with opts
+          command: yarn run slack-ts-opts
+      - run:
+          when: always
+          name: Slack Custom Reporting via JavaScript Compiled File with opts
+          command: yarn run slack-js-opts
+      - run:
+          when: always
+          name: Generate Test Passing Slack Alert
+          command: yarn run slack-js-opts-test-passed
+      - run:
+          when: always
+          name: Generate Test Failing Slack Alert
+          command: yarn run slack-js-opts-test-failed
+      - run:
+          when: always
+          name: Generate Build Failure Slack Alert
+          command: yarn run slack-js-opts-build-failed
+      - run:
+          when: always
+          name: Run the CLI Cypress Runner
+          command: yarn run cli
+      - store_artifacts:
+          path: src/slack/test
+      - store_artifacts:
+          path: cypress/reports/mocha
+
+workflows:
+  build-test:
+    jobs:
+      - test
